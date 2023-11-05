@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hệ Thống Điều Khiến Máy Bơm</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid p-5 bg-success text-white text-center">
+      <h1>Hệ Thống Điều Khiển Máy Bơm</h1>
+      <p>Phát Triển Bởi An Và Khang</p>
+    </div>
+
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-sm-4">
+          <h3>Độ Ẩm</h3>
+          <p id="doam"></p>
+          <hr />
+        </div>
+        <div class="col-sm-4">
+          <h3>Nhiệt Độ</h3>
+          <p id="nhietdo"></p>
+          <hr />
+        </div>
+        <div class="col-sm-4">
+          <h3>Bật Tắt Máy Bơm</h3>
+          <div class="form-check form-switch">
+            <input
+              id="flexSwitchCheckDefault"
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              onchange="togglePump()"
+            />
+          </div>
+          <hr />
+        </div>
+      </div>
+
+      <div>
+        <h3>Tổng số lần bơm trong ngày: <span id="pumpCount">0</span></h3>
+      </div>
+    </div>
+
+    <script>
+      var pumpCount = 0;
+      function togglePump() {
+        var toggle = document.getElementById("flexSwitchCheckDefault");
+        const isChecked = toggle.checked;
+        const command = isChecked ? "ON" : "OFF";
+        sendMqttRequest(command);
+
+        if (isChecked) {
+          // Nếu máy bơm được bật, hẹn giờ để tự động tắt nó sau 10 giây.
+          setTimeout(function () {
+            toggle.checked = false; // Tắt switch trên web
+            sendMqttRequest("OFF"); // Gửi yêu cầu MQTT để tắt máy bơm
+          }, 10000); // 10 giây (10000 mili giây)
+          
+          // console.log(pumpCount); //kiểm tra số lần bơm trước đó
+
+          // Tăng biến đếm lần bơm
+          pumpCount++;
+          // document.getElementById("pumpCount").textContent = pumpCount;  //hiển thị số lần bơm được trên web
+          
+          // console.log(pumpCount); //kiểm tra số lần bơm sau khi đã tăng lên 1 đơn vị
+        }
+      }
+
+      function sendMqttRequest(command) {
+        const url = `https://mqtt.baonamdts.com/cmnd/SOILSENSOR/command/${command}?p=iotdhtl`;
+
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.text();
+          })
+          .then((data) => {
+            console.log(`Command sent: ${command}`);
+            console.log("Response:", data);
+          })
+          .catch((error) => {
+            console.error("Error sending command:", error);
+          });
+      }
+
+      setInterval(() => {
+        fetch(
+          "https://mqtt.baonamdts.com/?ps=10&topic=SOILSENSOR&token=a3519714-bc3c-4a43-abe0-792c4d5ce2a4"
+        )
+          .then((x) => x.json())
+          .then((y) => {
+            const data = y.data.data[0].value.split(";");
+
+            document.getElementById("pumpCount").textContent = y.data.data.length;
+
+            if (data[1] === "nan") {
+              document.getElementById("nhietdo").innerHTML = `Không Xác Định`;
+            } else {
+              document.getElementById("nhietdo").innerHTML = `${data[1]} °C`;
+            }
+
+            if (data[0] === "1") {
+              document.getElementById("doam").innerHTML = `Thấp`;
+            } else {
+              document.getElementById("doam").innerHTML = `Cao`;
+            }
+          });
+      }, 1000);
+    </script>
+  </body>
+</html>
+
+
