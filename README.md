@@ -1,5 +1,5 @@
 # Hệ thống tưới nước tự động - Irrigation System
-Hệ thống tưới nước tự động đơn giản dựa trên công nghệ IoT, được triển khai để tự động hóa việc tưới cây trong khu vườn của trường Đại học Thủy Lợi. Mô hình này được điều khiển mặc định thông qua Arduino IDE và có khả năng điều khiển từ xa qua trang web, sử dụng các API cung cấp bởi Phòng Chuyển đổi số của trường Đại học Thủy Lợi.
+Hệ thống tưới nước tự động đơn giản dựa trên công nghệ IoT, được triển khai để tự động hóa việc tưới cây trong khu vườn của trường Đại học Thủy Lợi. Hệ thống này được điều khiển mặc định thông qua Arduino IDE và có khả năng điều khiển từ xa qua trang web, sử dụng các API cung cấp bởi Phòng Chuyển đổi số của trường Đại học Thủy Lợi.
 
 Hệ thống này có nhiều tính năng hữu ích như theo dõi nhiệt độ và độ ẩm tại vị trí cụ thể mà hệ thống được đặt, hoạt động bơm nước tự động dựa trên thời gian được cài đặt trước hoặc được điều khiển bằng cách tùy chỉnh trên trang web. Cùng với đó, bạn cũng có khả năng tùy chỉnh địa chỉ máy chủ API để tương thích với các yêu cầu cụ thể.
 
