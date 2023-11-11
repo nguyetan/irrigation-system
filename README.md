@@ -12,9 +12,7 @@ This system offers several useful features, such as monitoring temperature and h
 
 #Các tính năng trong tương lai - Future features
 
-•	Lắp đặt lưu lượng nước - Displays water flow
-
-•	Lắp đặt cảm biến mưa - Install a rain sensor
-
-•	Bổ sung cảm biến không khí - Add air sensor
+- Lắp đặt lưu lượng nước - Displays water flow
+- Lắp đặt cảm biến mưa - Install a rain sensor
+-	Bổ sung cảm biến không khí - Add air sensor
 
